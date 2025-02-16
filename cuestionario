@@ -1,0 +1,325 @@
+import React, { useState } from "react";
+
+export default function CapitalSocialSurveyApp() {
+  // Definimos todas las preguntas junto a sus opciones y valores.
+  const questions = [
+    {
+      id: "q1",
+      title: "1. Nivel de colaboración con otras organizaciones",
+      text: "¿Con qué frecuencia su organización colabora o participa en proyectos con otras organizaciones (ONG, asociaciones civiles, colectivos, etc.)?",
+      options: [
+        { label: "A", value: 1, description: "Nunca colabora" },
+        { label: "B", value: 2, description: "Solo en casos puntuales o de emergencia" },
+        { label: "C", value: 3, description: "Colabora de forma ocasional (un par de veces al año)" },
+        { label: "D", value: 4, description: "Colabora de manera frecuente (cada trimestre o mes)" },
+        { label: "E", value: 5, description: "Mantiene alianzas estables y trabaja constantemente con otras organizaciones" },
+      ],
+    },
+    {
+      id: "q2_1",
+      title: "2.1 Redes de contacto externas",
+      text: "¿Cuántas organizaciones o entidades externas relevantes conoce su organización y con cuántas mantiene un contacto activo?",
+      options: [
+        { label: "A", value: 1, description: "No conoce a ninguna / No mantiene contacto" },
+        { label: "B", value: 2, description: "Conoce algunas (1–2), pero el contacto es esporádico" },
+        { label: "C", value: 3, description: "Conoce varias (3–5) y mantiene contactos ocasionales" },
+        { label: "D", value: 4, description: "Conoce muchas (6–10) y mantiene contactos frecuentes" },
+        { label: "E", value: 5, description: "Conoce múltiples (más de 10) y mantiene una red sólida de contactos activos" },
+      ],
+    },
+    {
+      id: "q2_2",
+      title: "2.2 Redes de contacto externas",
+      text: "¿Qué tan efectiva es la red de contactos de su organización para conseguir recursos o apoyo?",
+      options: [
+        { label: "A", value: 1, description: "No sabe" },
+        { label: "B", value: 2, description: "Nada efectiva" },
+        { label: "C", value: 3, description: "Poco efectiva" },
+        { label: "D", value: 4, description: "Efectiva" },
+        { label: "E", value: 5, description: "Muy efectiva" },
+      ],
+    },
+    {
+      id: "q3",
+      title: "3. Participación comunitaria",
+      text: "¿De qué manera se involucra la comunidad local en las actividades o proyectos de su organización?",
+      options: [
+        { label: "A", value: 1, description: "No existe participación de la comunidad" },
+        { label: "B", value: 2, description: "Se informa a la comunidad sobre proyectos, pero no hay colaboración activa" },
+        { label: "C", value: 3, description: "Se recibe retroalimentación puntual, pero no se integra formalmente" },
+        { label: "D", value: 4, description: "La comunidad participa en etapas específicas de los proyectos" },
+        { label: "E", value: 5, description: "La comunidad participa de manera activa en todas las etapas y toma de decisiones" },
+      ],
+    },
+    {
+      id: "q4",
+      title: "4. Apoyo y voluntariado",
+      text: "¿De qué forma su organización cuenta con apoyo o voluntariado por parte de la comunidad y/o de otras redes?",
+      options: [
+        { label: "A", value: 1, description: "No cuenta con voluntariado" },
+        { label: "B", value: 2, description: "El voluntariado es ocasional y sin organización formal" },
+        { label: "C", value: 3, description: "Tiene un grupo fijo de voluntarios que se activa en proyectos puntuales" },
+        { label: "D", value: 4, description: "Existe un programa de voluntariado estable y coordinado" },
+        { label: "E", value: 5, description: "Además de un programa formal, cuenta con líderes voluntarios integrados en la toma de decisiones" },
+      ],
+    },
+    {
+      id: "q5",
+      title: "5. Niveles de confianza interna",
+      text: "¿Cómo describiría el nivel de confianza y cooperación entre los miembros de su organización?",
+      options: [
+        { label: "A", value: 1, description: "Muy bajo: hay recelo y poca comunicación" },
+        { label: "B", value: 2, description: "Bajo: existen conflictos frecuentes y poca colaboración" },
+        { label: "C", value: 3, description: "Moderado: se trabaja en conjunto, pero con algunas tensiones ocasionales" },
+        { label: "D", value: 4, description: "Alto: se percibe camaradería y buena disposición general" },
+        { label: "E", value: 5, description: "Muy alto: el equipo trabaja de forma cohesionada y colabora de manera ejemplar" },
+      ],
+    },
+    {
+      id: "q6",
+      title: "6. Niveles de confianza externa",
+      text: "¿Cómo describiría la confianza y la reputación de su organización ante entidades externas (donantes, autoridades, otras ONG)?",
+      options: [
+        { label: "A", value: 1, description: "Muy baja: no es reconocida o existe desconfianza" },
+        { label: "B", value: 2, description: "Baja: hay poca visibilidad y credibilidad" },
+        { label: "C", value: 3, description: "Moderada: algunos grupos confían, pero falta mayor presencia" },
+        { label: "D", value: 4, description: "Alta: reconocen la labor de la organización, existe confianza en la mayoría de los actores" },
+        { label: "E", value: 5, description: "Muy alta: es ampliamente reconocida y goza de una reputación consolidada" },
+      ],
+    },
+    {
+      id: "q7",
+      title: "7. Intercambio de recursos y conocimientos",
+      text: "¿Qué nivel de intercambio de recursos (materiales, humanos, conocimiento) mantiene su organización con otras instituciones o redes?",
+      options: [
+        { label: "A", value: 1, description: "Ninguno: no se comparten recursos ni conocimientos" },
+        { label: "B", value: 2, description: "Bajo: se comparten solo en casos muy puntuales" },
+        { label: "C", value: 3, description: "Moderado: existe colaboración ocasional en recursos o capacitaciones" },
+        { label: "D", value: 4, description: "Alto: con frecuencia se intercambian conocimientos, materiales o personal capacitado" },
+        { label: "E", value: 5, description: "Muy alto: se establecen convenios formales de intercambio y se fomenta la formación conjunta" },
+      ],
+    },
+    {
+      id: "q8",
+      title: "8. Vínculos con autoridades y políticas públicas",
+      text: "¿Qué relación mantiene su organización con autoridades locales, regionales o nacionales para incidir en políticas públicas o recibir apoyos?",
+      options: [
+        { label: "A", value: 1, description: "No tiene relación con las autoridades" },
+        { label: "B", value: 2, description: "Solo se acerca a las autoridades para trámites administrativos mínimos" },
+        { label: "C", value: 3, description: "Mantiene un vínculo ocasional para proyectos específicos" },
+        { label: "D", value: 4, description: "Participa en mesas de diálogo o foros con regularidad" },
+        { label: "E", value: 5, description: "Tiene un papel activo en la elaboración de políticas y programas relacionados con su área" },
+      ],
+    },
+    {
+      id: "q9",
+      title: "9. Espacios de toma de decisiones compartida",
+      text: "¿Existen mecanismos formales para que la comunidad, voluntarios o colaboradores externos participen en la toma de decisiones dentro de la organización?",
+      options: [
+        { label: "A", value: 1, description: "No existen mecanismos de participación formal" },
+        { label: "B", value: 2, description: "Se reciben opiniones de manera informal, pero sin incidencia real" },
+        { label: "C", value: 3, description: "Hay reuniones periódicas donde se recogen sugerencias puntuales" },
+        { label: "D", value: 4, description: "Se cuenta con un consejo o comité donde participan representantes de distintos grupos" },
+        { label: "E", value: 5, description: "La organización promueve un modelo de gobernanza compartida, con voto y voz para las partes interesadas" },
+      ],
+    },
+    {
+      id: "q10_1",
+      title: "10.1 Proyección y sostenibilidad en la comunidad",
+      text: "¿Cómo se percibe el impacto y la continuidad de los programas de la organización en la comunidad o sector donde opera?",
+      options: [
+        { label: "A", value: 1, description: "Apenas se percibe el impacto y no hay planes de sostenibilidad" },
+        { label: "B", value: 2, description: "El impacto es limitado y se trabaja en una estrategia de continuidad básica" },
+        { label: "C", value: 3, description: "El impacto es moderado y existen planes para sostener algunos programas" },
+        { label: "D", value: 4, description: "El impacto es notorio y se cuenta con respaldo de la comunidad para sostener los programas" },
+        { label: "E", value: 5, description: "El impacto está consolidado y la comunidad respalda activamente la continuidad y expansión de los proyectos" },
+      ],
+    },
+    {
+      id: "q10_2",
+      title: "10.2 Proyección y sostenibilidad en la comunidad",
+      text: "¿Con qué frecuencia mide el impacto social de sus proyectos?",
+      options: [
+        { label: "A", value: 1, description: "Nunca" },
+        { label: "B", value: 2, description: "Raramente" },
+        { label: "C", value: 3, description: "Ocasionalmente" },
+        { label: "D", value: 4, description: "Regularmente" },
+        { label: "E", value: 5, description: "Permanentemente" },
+      ],
+    },
+    {
+      id: "q11_1",
+      title: "11.1 Normas compartidas",
+      text: "¿Qué tan de acuerdo está con que su organización tiene normas claras y bien definidas que guían su trabajo?",
+      options: [
+        { label: "A", value: 1, description: "Muy en desacuerdo" },
+        { label: "B", value: 2, description: "En desacuerdo" },
+        { label: "C", value: 3, description: "Neutral" },
+        { label: "D", value: 4, description: "De acuerdo" },
+        { label: "E", value: 5, description: "Muy de acuerdo" },
+      ],
+    },
+    {
+      id: "q11_2",
+      title: "11.2 Normas compartidas",
+      text: "¿Cómo calificaría el cumplimiento de las normas y políticas internas de su organización?",
+      options: [
+        { label: "A", value: 1, description: "Malo" },
+        { label: "B", value: 2, description: "Regular" },
+        { label: "C", value: 3, description: "Bueno" },
+        { label: "D", value: 4, description: "Muy bueno" },
+        { label: "E", value: 5, description: "Excelente" },
+      ],
+    },
+    {
+      id: "q12_1",
+      title: "12.1 Recursos y financiamiento",
+      text: "¿Cómo calificaría la diversificación de las fuentes de financiamiento de su organización?",
+      options: [
+        { label: "A", value: 1, description: "Nada diversificada" },
+        { label: "B", value: 2, description: "Muy poco diversificada" },
+        { label: "C", value: 3, description: "Poco diversificada" },
+        { label: "D", value: 4, description: "Diversificada" },
+        { label: "E", value: 5, description: "Muy diversificada" },
+      ],
+    },
+    {
+      id: "q12_2",
+      title: "12.2 Recursos y financiamiento",
+      text: "¿Qué porcentaje de los ingresos de su organización proviene de donaciones o subvenciones?",
+      options: [
+        { label: "A", value: 1, description: "Menos del 15%" },
+        { label: "B", value: 2, description: "Entre el 15% y el 25%" },
+        { label: "C", value: 3, description: "Entre 25% y 50%" },
+        { label: "D", value: 4, description: "Entre 50% y 75%" },
+        { label: "E", value: 5, description: "Más del 75%" },
+      ],
+    },
+  ];
+
+  // Creamos un estado para almacenar las respuestas seleccionadas.
+  const [answers, setAnswers] = useState({});
+
+  // Creamos un estado para manejar la puntuación total y la categoría.
+  const [totalScore, setTotalScore] = useState(null);
+  const [category, setCategory] = useState("");
+
+  // Maneja el cambio de respuesta en cada pregunta.
+  const handleChange = (questionId, optionValue) => {
+    setAnswers({
+      ...answers,
+      [questionId]: optionValue,
+    });
+  };
+
+  // Función para calcular el puntaje total y la categoría
+  const calculateScore = () => {
+    // sumamos los valores de answers
+    let sum = 0;
+    questions.forEach((q) => {
+      const value = answers[q.id] || 0; // si no hay respuesta, consideramos 0.
+      sum += parseInt(value, 10);
+    });
+    setTotalScore(sum);
+
+    // Ajustamos la escala a 16 preguntas (mínimo 16, máximo 80)
+    // Propuesta de categorización (en base a proporciones similares a la del documento):
+    // - Bajo: 16 a 38
+    // - Medio: 39 a 62
+    // - Alto: 63 a 80
+
+    let cat = "";
+    if (sum <= 38) {
+      cat = "Bajo Capital Social";
+    } else if (sum <= 62) {
+      cat = "Medio Capital Social";
+    } else {
+      cat = "Alto Capital Social";
+    }
+    setCategory(cat);
+  };
+
+  return (
+    <div className="p-4 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">MEDICIÓN DE CAPITAL SOCIAL</h1>
+      <p className="mb-4">
+        El formulario es una herramienta diagnóstica diseñada para evaluar el nivel de capital social de una organización.
+        Su objetivo es analizar aspectos clave como la colaboración con otras entidades, la efectividad de las redes de contacto,
+        la participación de la comunidad, la confianza interna y externa, el intercambio de recursos, y los mecanismos de toma de decisiones.
+        Cada pregunta se responde mediante una única opción (A a E), asignando un puntaje de 1 a 5, lo que permite cuantificar
+        y clasificar el capital social en tres niveles: bajo, medio y alto.
+      </p>
+      <p className="mb-4">
+        Realizar este formulario ayuda a las organizaciones a identificar sus fortalezas y áreas de mejora en el ámbito de las
+        relaciones y colaboraciones, facilitando el diseño de estrategias para fortalecer sus redes, optimizar la participación
+        comunitaria y mejorar su impacto social. Además, la categorización obtenida (bajo, medio o alto) orienta sobre las
+        necesidades específicas de desarrollo en cuanto a alianzas y cohesión interna, siendo una herramienta útil para
+        planificar acciones que potencien la efectividad y sostenibilidad de sus proyectos.
+      </p>
+      <p className="mb-4">
+        Lee cada pregunta y selecciona la respuesta que mejor describa la situación actual de tu organización.
+        Solo se permite elegir una respuesta por pregunta.
+      </p>
+
+      {questions.map((q) => (
+        <div key={q.id} className="mb-6 bg-white p-4 rounded-2xl shadow">
+          <h2 className="font-semibold mb-2">{q.title}</h2>
+          <p className="mb-3">{q.text}</p>
+          <div className="flex flex-col gap-2">
+            {q.options.map((opt) => (
+              <label key={opt.label} className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="radio"
+                  name={q.id}
+                  value={opt.value}
+                  checked={answers[q.id] === opt.value}
+                  onChange={() => handleChange(q.id, opt.value)}
+                  className="accent-blue-600"
+                />
+                <span className="text-sm">[{opt.label}] {opt.description}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <button
+        onClick={calculateScore}
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700"
+      >
+        Calificar
+      </button>
+
+      {totalScore !== null && (
+        <div className="mt-4 bg-gray-100 p-4 rounded-2xl">
+          <p className="text-lg font-medium">
+            Puntaje Total: <span className="font-bold">{totalScore}</span>
+          </p>
+          <p className="text-lg font-medium">
+            Categoría: <span className="font-bold">{category}</span>
+          </p>
+          <div className="mt-2">
+            {category === "Bajo Capital Social" && (
+              <p>
+                Indica que la organización presenta debilidades en aspectos clave como colaboración,
+                confianza y participación. Se recomiendan estrategias para fortalecer relaciones internas y externas.
+              </p>
+            )}
+            {category === "Medio Capital Social" && (
+              <p>
+                Se observan avances, pero aún existen áreas de mejora en la consolidación de redes,
+                la participación de la comunidad y la confianza mutua.
+              </p>
+            )}
+            {category === "Alto Capital Social" && (
+              <p>
+                La organización cuenta con una base sólida de capital social, con alta colaboración y confianza,
+                lo que favorece su impacto y sostenibilidad en la comunidad.
+              </p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
